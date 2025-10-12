@@ -29,32 +29,41 @@ namespace AddShapeEffect
         [Display(GroupName = "描画", Name = "不透明度", Description = "不透明度")]
         [AnimationSlider("F1", "%", 0, 100)]
         public Animation Opacity { get; } = new Animation(100, 0, 100);
+
         [Display(GroupName = "描画", Name = "拡大率全体", Description = "全体の拡大率")]
         [AnimationSlider("F1", "%", 0, 100)]
         public Animation Zoom { get; } = new Animation(100, 0, 100000);
+
         [Display(GroupName = "描画", Name = "拡大率横方向", Description = "横方向の拡大率")]
         [AnimationSlider("F1", "%", 0, 100)]
         public Animation ZoomX { get; } = new Animation(100, 0, 100000);
+
         [Display(GroupName = "描画", Name = "拡大率縦方向", Description = "縦方向の拡大率")]
         [AnimationSlider("F1", "%", 0, 100)]
         public Animation ZoomY { get; } = new Animation(100, 0, 100000);
+
         [Display(GroupName = "描画", Name = "X軸回転", Description = "X軸に対する回転角")]
         [AnimationSlider("F1", "°", -360, 360)]
         public Animation RotationX { get; } = new Animation(0, -100000, 100000);
+
         [Display(GroupName = "描画", Name = "Y軸回転", Description = "Y軸に対する回転角")]
         [AnimationSlider("F1", "°", -360, 360)]
         public Animation RotationY { get; } = new Animation(0, -100000, 100000);
+
         [Display(GroupName = "描画", Name = "Z軸回転", Description = "Z軸に対する回転角")]
         [AnimationSlider("F1", "°", -360, 360)]
         public Animation RotationZ { get; } = new Animation(0, -100000, 100000);
+
         [Display(GroupName = "描画", Name = "左右反転", Description = "左右反転")]
         [ToggleSlider]
         public bool InvertX { get => invertX; set => Set(ref invertX, value); }
         bool invertX = false;
+
         [Display(GroupName = "描画", Name = "上下反転", Description = "上下反転")]
         [ToggleSlider]
         public bool InvertY { get => invertY; set => Set(ref invertY, value); }
         bool invertY = false;
+
         [Display(GroupName = "図形", Name = "クリッピング", Description = "図形を下のアイテムの形状で切り抜きます")]
         [ToggleSlider]
         public bool IsClippingEnabled { get => isClippingEnabled; set => Set(ref isClippingEnabled, value); }
@@ -83,6 +92,11 @@ namespace AddShapeEffect
         public IShapeParameter ShapeParameter { get => shapeParameter; set => Set(ref shapeParameter, value); }
         IShapeParameter shapeParameter = new RectangleShapeParameter(null);
 
+
+        [Display(GroupName = "図形のエフェクト", Name = "", Description = "図形にかける映像エフェクト")]
+        [VideoEffectSelector(PropertyEditorSize = PropertyEditorSize.FullWidth)]
+        public ImmutableList<IVideoEffect> Effects { get => effects; set => Set(ref effects, value); }
+        ImmutableList<IVideoEffect> effects = [];
         public override void BeginEdit()
         {
             oldShapeType = ShapeType;
@@ -100,11 +114,6 @@ namespace AddShapeEffect
             await base.EndEditAsync();
         }
 
-        [Display(GroupName = "図形のエフェクト", Name = "", Description = "図形にかける映像エフェクト")]
-        [VideoEffectSelector(PropertyEditorSize = PropertyEditorSize.FullWidth)]
-        public ImmutableList<IVideoEffect> Effects { get => effects; set => Set(ref effects, value); }
-        ImmutableList<IVideoEffect> effects = [];
-
         public override IEnumerable<string> CreateExoVideoFilters(int keyFrameIndex, ExoOutputDescription exoOutputDescription)
         {
             return [];
@@ -116,21 +125,7 @@ namespace AddShapeEffect
         }
 
         protected override IEnumerable<IAnimatable> GetAnimatables()
-        {
-            yield return ShapeParameter;
-            // --- 追加されたAnimationを列挙に追加 ---
-            yield return X;
-            yield return Y;
-            yield return Z;
-            yield return Opacity;
-            yield return Zoom;
-            yield return ZoomX;
-            yield return ZoomY;
-            yield return RotationX;
-            yield return RotationY;
-            yield return RotationZ;
-            // --- ここまで ---
-        }
+            => [X, Y, Z, Opacity, Zoom, ZoomX, ZoomY, RotationX, RotationY, RotationZ, .. Effects];
 
         Type? GetShapeType(ShapeTypeEnum shapeType)
         {
