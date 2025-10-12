@@ -1,22 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Diagnostics;
-using System.Linq;
-using System.Numerics;
-using System.Text.RegularExpressions;
-using System.Windows.Media.Imaging;
+﻿using System.Numerics;
 using AddShapeEffect.ForVideoEffectChain;
 using Vortice.Direct2D1;
 using Vortice.Direct2D1.Effects;
 using Vortice.Mathematics;
-using Windows.Win32.UI.Input.KeyboardAndMouse;
 using YukkuriMovieMaker.Commons;
 using YukkuriMovieMaker.Player.Video;
-using YukkuriMovieMaker.Plugin;
-using YukkuriMovieMaker.Plugin.Effects;
 using YukkuriMovieMaker.Plugin.Shape;
-using YukkuriMovieMaker.Settings;
 
 namespace AddShapeEffect
 {

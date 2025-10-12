@@ -30,7 +30,6 @@ namespace AddShapeEffect.ForVideoEffectChain
 
             isEmpty = true;
         }
-
         public void UpdateChain(ImmutableList<IVideoEffect> effects)
         {
             var disposedIndex = from tuple in Chain
