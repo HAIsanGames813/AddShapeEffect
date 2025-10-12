@@ -30,15 +30,15 @@ namespace AddShapeEffect
         [AnimationSlider("F1", "%", 0, 100)]
         public Animation Opacity { get; } = new Animation(100, 0, 100);
 
-        [Display(GroupName = "描画", Name = "拡大率全体", Description = "全体の拡大率")]
+        [Display(GroupName = "描画", Name = "拡大率", Description = "全体の拡大率")]
         [AnimationSlider("F1", "%", 0, 100)]
         public Animation Zoom { get; } = new Animation(100, 0, 100000);
 
-        [Display(GroupName = "描画", Name = "拡大率横方向", Description = "横方向の拡大率")]
+        [Display(GroupName = "描画", Name = "拡大率X", Description = "横方向の拡大率")]
         [AnimationSlider("F1", "%", 0, 100)]
         public Animation ZoomX { get; } = new Animation(100, 0, 100000);
 
-        [Display(GroupName = "描画", Name = "拡大率縦方向", Description = "縦方向の拡大率")]
+        [Display(GroupName = "描画", Name = "拡大率Y", Description = "縦方向の拡大率")]
         [AnimationSlider("F1", "%", 0, 100)]
         public Animation ZoomY { get; } = new Animation(100, 0, 100000);
 
