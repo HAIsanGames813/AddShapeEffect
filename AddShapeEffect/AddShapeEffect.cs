@@ -16,12 +16,15 @@ namespace AddShapeEffect
     internal class AddShapeEffect : VideoEffectBase
     {
         public override string Label => "図形貼り付け";
+
         [Display(GroupName = "描画", Name = "X座標", Description = "横方向の描画位置")]
         [AnimationSlider("F1", "px", -500, 500)]
         public Animation X { get; } = new Animation(0, -100000, 100000);
+
         [Display(GroupName = "描画", Name = "Y座標", Description = "縦方向の描画位置")]
         [AnimationSlider("F1", "px", -500, 500)]
         public Animation Y { get; } = new Animation(0, -100000, 100000);
+
         [Display(GroupName = "描画", Name = "Z座標", Description = "奥行きの描画位置")]
         [AnimationSlider("F1", "px", -500, 500)]
         public Animation Z { get; } = new Animation(0, -100000, 100000);
@@ -30,15 +33,15 @@ namespace AddShapeEffect
         [AnimationSlider("F1", "%", 0, 100)]
         public Animation Opacity { get; } = new Animation(100, 0, 100);
 
-        [Display(GroupName = "描画", Name = "拡大率全体", Description = "全体の拡大率")]
+        [Display(GroupName = "描画", Name = "拡大率", Description = "全体の拡大率")]
         [AnimationSlider("F1", "%", 0, 100)]
         public Animation Zoom { get; } = new Animation(100, 0, 100000);
 
-        [Display(GroupName = "描画", Name = "拡大率横方向", Description = "横方向の拡大率")]
+        [Display(GroupName = "描画", Name = "拡大率X", Description = "横方向の拡大率")]
         [AnimationSlider("F1", "%", 0, 100)]
         public Animation ZoomX { get; } = new Animation(100, 0, 100000);
 
-        [Display(GroupName = "描画", Name = "拡大率縦方向", Description = "縦方向の拡大率")]
+        [Display(GroupName = "描画", Name = "拡大率Y", Description = "縦方向の拡大率")]
         [AnimationSlider("F1", "%", 0, 100)]
         public Animation ZoomY { get; } = new Animation(100, 0, 100000);
 
@@ -84,14 +87,11 @@ namespace AddShapeEffect
 
         public Type ShapeType { get => shapeType; set => Set(ref shapeType, value); }
         Type shapeType = typeof(QuadrilateralShapePlugin);
-
         private Type? oldShapeType;
-
 
         [Display(GroupName = "図形", AutoGenerateField = true)]
         public IShapeParameter ShapeParameter { get => shapeParameter; set => Set(ref shapeParameter, value); }
         IShapeParameter shapeParameter = new RectangleShapeParameter(null);
-
 
         [Display(GroupName = "図形のエフェクト", Name = "", Description = "図形にかける映像エフェクト")]
         [VideoEffectSelector(PropertyEditorSize = PropertyEditorSize.FullWidth)]
@@ -125,7 +125,7 @@ namespace AddShapeEffect
         }
 
         protected override IEnumerable<IAnimatable> GetAnimatables()
-            => [X, Y, Z, Opacity, Zoom, ZoomX, ZoomY, RotationX, RotationY, RotationZ, .. Effects];
+            => [X, Y, Z, Opacity, Zoom, ZoomX, ZoomY, RotationX, RotationY, RotationZ, ShapeParameter, .. Effects];
 
         Type? GetShapeType(ShapeTypeEnum shapeType)
         {
