@@ -14,7 +14,6 @@ namespace AddShapeEffect
         readonly AddShapeEffect item;
         readonly IGraphicsDevicesAndContext devices;
         readonly VideoEffectChainNode chain;
-        int oldLenOfEffects;
 
 
         DisposeCollector disposer = new();
@@ -25,10 +24,10 @@ namespace AddShapeEffect
         IShapeSource? shapeSource;
 
         private readonly Transform3D transformEffect;
-
+        private readonly Crop cropEffect;
         private readonly Opacity opacityEffect;
 
-        private readonly Transform3D inputTransformEffect;
+        private readonly AffineTransform2D inputTransformEffect;
 
         private readonly AlphaMask alphaMaskEffect;
         private readonly Composite finalCompositeEffect;
@@ -39,22 +38,25 @@ namespace AddShapeEffect
         public AddShapeEffectProcessor(IGraphicsDevicesAndContext devices, AddShapeEffect item)
         {
             chain = new VideoEffectChainNode(devices);
-            oldLenOfEffects = item.Effects.Count;
             this.item = item;
             this.devices = devices;
 
             transformEffect = new Transform3D(devices.DeviceContext);
             disposer.Collect(transformEffect);
 
+            cropEffect = new Crop(devices.DeviceContext);
+            cropEffect.SetInput(0, transformEffect.Output, true);
+            disposer.Collect(cropEffect);
+
             opacityEffect = new Opacity(devices.DeviceContext);
+            opacityEffect.SetInput(0, cropEffect.Output, true);
             disposer.Collect(opacityEffect);
-
-            inputTransformEffect = new Transform3D(devices.DeviceContext);
-            disposer.Collect(inputTransformEffect);
-
 
             alphaMaskEffect = new AlphaMask(devices.DeviceContext);
             disposer.Collect(alphaMaskEffect);
+
+            inputTransformEffect = new AffineTransform2D(devices.DeviceContext);
+            disposer.Collect(inputTransformEffect);
 
             finalCompositeEffect = new Composite(devices.DeviceContext);
             disposer.Collect(finalCompositeEffect);
@@ -73,7 +75,6 @@ namespace AddShapeEffect
             ID2D1Image? transformedShapeImage = null;
             ID2D1Image? maskedShapeImage = null;
             DrawDescription descAfterChain = effectDescription.DrawDescription;
-            inputTransformEffect.TransformMatrix = Matrix4x4.Identity;
 
             {
                 var shapeParameter = item.ShapeParameter;
@@ -101,18 +102,6 @@ namespace AddShapeEffect
             if (shapeOutputImage != null)
             {
                 chain.SetInput(shapeOutputImage);
-                DrawDescription initialDesc;
-                    initialDesc = new(
-                        effectDescription.DrawDescription.Draw,
-                        new System.Numerics.Vector2(0, 0),
-                        new System.Numerics.Vector2(1f, 1f),
-                        new System.Numerics.Vector3(0, 0, 0),
-                        effectDescription.DrawDescription.Camera,
-                        effectDescription.DrawDescription.ZoomInterpolationMode,
-                        1.0f,
-                        false,
-                        effectDescription.DrawDescription.Controllers
-                    );
 
                 ID2D1Image imageAfterChain = chain.Output;
 
@@ -126,23 +115,41 @@ namespace AddShapeEffect
                 var zoomXItem = (float)item.ZoomX.GetValue(Frame, length, FPS) / 100.0f;
                 var zoomYItem = (float)item.ZoomY.GetValue(Frame, length, FPS) / 100.0f;
                 var opacityItem = (float)item.Opacity.GetValue(Frame, length, FPS) / 100.0f;
-                float finalOpacity = opacityItem;
+
+                DrawDescription initialDesc;
+                initialDesc = new(
+                    new Vector3(x, y, z),
+                    new Vector2(0, 0),
+                    new Vector2(zoomItem * zoomXItem, zoomItem * zoomYItem),
+                    new Vector3(rotX, rotY, rotZ),
+                    Matrix4x4.Identity,
+                    InterpolationMode.Linear,
+                    opacityItem,
+                    false,
+                    []
+                );
+
+                chain.UpdateChain(item.Effects);
+                DrawDescription newDescription = chain.UpdateOutputAndDescription(effectDescription, initialDesc);
+
+                float finalOpacity = (float)newDescription.Opacity;
+
 
                 if (item.InvertX) zoomXItem *= -1f;
                 if (item.InvertY) zoomYItem *= -1f;
                 Matrix4x4 scale = Matrix4x4.CreateScale(
-                    zoomXItem * zoomItem,
-                    zoomYItem * zoomItem,
+                    newDescription.Zoom.X,
+                    newDescription.Zoom.Y,
                     1.0f);
-                Matrix4x4 rotXMat = Matrix4x4.CreateRotationX((float)MathHelper.ToRadians(rotX));
-                Matrix4x4 rotYMat = Matrix4x4.CreateRotationY((float)MathHelper.ToRadians(rotY));
-                Matrix4x4 rotZMat = Matrix4x4.CreateRotationZ((float)MathHelper.ToRadians(rotZ));
+                Matrix4x4 rotXMat = Matrix4x4.CreateRotationX((float)MathHelper.ToRadians(newDescription.Rotation.X));
+                Matrix4x4 rotYMat = Matrix4x4.CreateRotationY((float)MathHelper.ToRadians(newDescription.Rotation.Y));
+                Matrix4x4 rotZMat = Matrix4x4.CreateRotationZ((float)MathHelper.ToRadians(newDescription.Rotation.Z));
 
                 float cameraDistance = 1000.0f;
                 Matrix4x4 perspective = Matrix4x4.Identity;
                 perspective.M34 = -1.0f / cameraDistance;
 
-                Matrix4x4 translation = Matrix4x4.CreateTranslation(x, y, z);
+                Matrix4x4 translation = Matrix4x4.CreateTranslation(newDescription.Draw);
 
                 Matrix4x4 finalTransform =
                     scale *
@@ -150,14 +157,14 @@ namespace AddShapeEffect
                     rotYMat *
                     rotZMat *
                     translation *
+                    newDescription.Camera *
                     perspective;
 
                 transformEffect.SetInput(0, imageAfterChain, true);
                 transformEffect.TransformMatrix = finalTransform;
 
-                opacityEffect.SetInput(0, transformEffect.Output, true);
-
                 opacityEffect.SetValue(0, finalOpacity);
+                Apply(devices.DeviceContext);
 
                 transformedShapeImage = opacityEffect.Output;
             }
@@ -219,5 +226,28 @@ namespace AddShapeEffect
             chain.SetInput(input);
             chain.UpdateChain(item.Effects);
         }
+
+        #region SafeTransform3DHelper
+        const float D3D11_FTOI_INSTRUCTION_MAX_INPUT = 2.1474836E+09f;
+        const float D3D11_FTOI_INSTRUCTION_MIN_INPUT = -2.1474836E+09f;
+
+        void Apply(ID2D1DeviceContext deviceContext)
+        {
+            //transform3dエフェクトの出力画像1pxあたりの入力サイズが4096pxを超えるとエラーになる
+            //エラー時には出力サイズがD3D11_FTOI_INSTRUCTION_MAX_INPUTになるため、cropエフェクトを使用し入力サイズを4096pxに制限する
+
+            //一旦cropエフェクトの範囲を初期化する
+            cropEffect.Rectangle = new Vector4(float.MinValue, float.MinValue, float.MaxValue, float.MaxValue);
+            var renderBounds = deviceContext.GetImageLocalBounds(transformEffect.Output);
+            if (renderBounds.Left == D3D11_FTOI_INSTRUCTION_MIN_INPUT
+                || renderBounds.Top == D3D11_FTOI_INSTRUCTION_MIN_INPUT
+                || renderBounds.Right == D3D11_FTOI_INSTRUCTION_MAX_INPUT
+                || renderBounds.Bottom == D3D11_FTOI_INSTRUCTION_MAX_INPUT)
+            {
+                //エラーの場合にのみ入力サイズを制限する
+                cropEffect.Rectangle = new Vector4(-2048, -2048, 2048, 2048);
+            }
+        }
+        #endregion
     }
 }
