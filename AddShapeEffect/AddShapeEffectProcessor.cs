@@ -18,13 +18,6 @@ using YukkuriMovieMaker.Plugin.Effects;
 using YukkuriMovieMaker.Plugin.Shape;
 using YukkuriMovieMaker.Settings;
 
-
-
-
-
-
-
-
 namespace AddShapeEffect
 {
     internal class AddShapeEffectProcessor : IVideoEffectProcessor
