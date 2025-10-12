@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AddShapeEffect.ForVideoEffectChain;
+﻿using System.Collections.Immutable;
 using Vortice.Direct2D1;
 using Vortice.Direct2D1.Effects;
 using YukkuriMovieMaker.Commons;
