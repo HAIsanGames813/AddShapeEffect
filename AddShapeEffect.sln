@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36414.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddShapeEffect", "AddShapeEffect\AddShapeEffect.csproj", "{8D195305-CCB0-4B49-A075-29202E18E743}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8D195305-CCB0-4B49-A075-29202E18E743}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D195305-CCB0-4B49-A075-29202E18E743}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D195305-CCB0-4B49-A075-29202E18E743}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D195305-CCB0-4B49-A075-29202E18E743}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B9ADD6CE-35FA-4096-B685-7B7C3EBF3175}
+	EndGlobalSection
+EndGlobal
