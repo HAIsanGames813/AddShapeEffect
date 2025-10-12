@@ -125,7 +125,7 @@ namespace AddShapeEffect
         }
 
         protected override IEnumerable<IAnimatable> GetAnimatables()
-            => [X, Y, Z, Opacity, Zoom, ZoomX, ZoomY, RotationX, RotationY, RotationZ, .. Effects];
+            => [X, Y, Z, Opacity, Zoom, ZoomX, ZoomY, RotationX, RotationY, RotationZ, ShapeParameter, .. Effects];
 
         Type? GetShapeType(ShapeTypeEnum shapeType)
         {
