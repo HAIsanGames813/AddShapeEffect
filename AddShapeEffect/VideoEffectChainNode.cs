@@ -16,7 +16,8 @@ namespace AddShapeEffect.ForVideoEffectChain
         ID2D1Image? input;
         bool isEmpty;
         List<(IVideoEffect effect, IVideoEffectProcessor processor)> Chain = [];
-        ImmutableList<IVideoEffect> lastEffects = [];
+        TimelineItemSourceDescription? lastTimelineSourceDescription;
+        DrawDescription? lastDrawDescription;
 
         ID2D1Image output;
         public ID2D1Image Output => isEmpty ? empty : output;
@@ -31,10 +32,9 @@ namespace AddShapeEffect.ForVideoEffectChain
 
             isEmpty = true;
         }
-        public void UpdateChain(ImmutableList<IVideoEffect> effects)
-        {
-            lastEffects = [.. effects];
 
+        private void UpdateChain(ImmutableList<IVideoEffect> effects)
+        {
             var disposedIndex = from tuple in Chain
                                 where !effects.Contains(tuple.effect)
                                 select Chain.IndexOf(tuple) into i
@@ -59,7 +59,7 @@ namespace AddShapeEffect.ForVideoEffectChain
             Chain = newChain;
         }
 
-        public void SetInput(ID2D1Image? input)
+        public void SetInputAndEffects(ID2D1Image? input, ImmutableList<IVideoEffect> effects)
         {
             this.input = input;
             if (input == null)
@@ -69,11 +69,12 @@ namespace AddShapeEffect.ForVideoEffectChain
             }
             else
             {
-                if (Chain.Count > 0)
+                if (effects.Count > 0)
                 {
-                    Chain.First().processor.SetInput(input);
-                    UpdateChain(lastEffects);
-                    transform.SetInput(0, Chain.Last().processor.Output, true);
+                    UpdateChain(effects);
+
+                    if (lastTimelineSourceDescription is not null && lastDrawDescription is not null)
+                        UpdateOutputAndDescription(lastTimelineSourceDescription, lastDrawDescription);
                 }
                 else
                 {
@@ -108,6 +109,9 @@ namespace AddShapeEffect.ForVideoEffectChain
 
         public DrawDescription UpdateOutputAndDescription(TimelineItemSourceDescription timelineSourceDescription, DrawDescription drawDescription)
         {
+            lastTimelineSourceDescription = timelineSourceDescription;
+            lastDrawDescription = drawDescription;
+
             if (input == null)
             {
                 isEmpty = true;
