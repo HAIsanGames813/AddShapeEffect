@@ -63,8 +63,8 @@ namespace AddShapeEffect
 
             Output = finalCompositeEffect.Output;
             disposer.Collect(Output);
-        }
 
+        }
         public DrawDescription Update(EffectDescription effectDescription)
         {
             long Frame = effectDescription.ItemPosition.Frame;
@@ -72,44 +72,39 @@ namespace AddShapeEffect
             int FPS = effectDescription.FPS;
 
             ID2D1Image? shapeOutputImage = null;
-            ID2D1Image? transformedShapeImage;
-            ID2D1Image? maskedShapeImage;
+            ID2D1Image? transformedShapeImage = null;
+            ID2D1Image? maskedShapeImage = null;
             DrawDescription descAfterChain = effectDescription.DrawDescription;
 
-            var shapeParameter = item.ShapeParameter;
-            if (isFirst || this.shapeParameter != shapeParameter)
             {
-                if (shapeSource != null)
-                    disposer.RemoveAndDispose(ref shapeSource);
-                this.shapeParameter = shapeParameter;
-                shapeSource = shapeParameter.CreateShapeSource(devices);
-                disposer.Collect(shapeSource);
-                isFirst = false;
+                var shapeParameter = item.ShapeParameter;
+
+                if (isFirst || this.shapeParameter != shapeParameter)
+                {
+                    if (shapeSource is not null) { disposer.RemoveAndDispose(ref shapeSource); }
+                    if (shapeParameter != null)
+                    {
+                        shapeSource = shapeParameter.CreateShapeSource(devices);
+                        disposer.Collect(shapeSource);
+                    }
+                    isFirst = false;
+                    this.shapeParameter = shapeParameter;
+                }
+
+                if (shapeSource is not null)
+                {
+                    shapeSource.Update(effectDescription);
+                    ID2D1Image current = shapeSource.Output;
+
+                    shapeOutputImage = current;
+                }
             }
-
-            //if (isFirst || this.shapeParameter != shapeParameter)
-            //{
-            //    if (shapeSource is not null) { disposer.RemoveAndDispose(ref shapeSource); }
-            //    if (shapeParameter != null)
-            //    {
-            //        shapeSource = shapeParameter.CreateShapeSource(devices);
-            //        disposer.Collect(shapeSource);
-            //    }
-            //    isFirst = false;
-            //    
-            //    this.shapeParameter = shapeParameter;
-            //}
-
-            if (shapeSource is not null)
-            {
-                shapeSource.Update(effectDescription);
-                ID2D1Image current = shapeSource.Output;
-
-                shapeOutputImage = current;
-            }
-
             if (shapeOutputImage != null)
             {
+                chain.SetInput(shapeOutputImage);
+
+                ID2D1Image imageAfterChain = chain.Output;
+
                 var x = (float)item.X.GetValue(Frame, length, FPS);
                 var y = (float)item.Y.GetValue(Frame, length, FPS);
                 var z = (float)item.Z.GetValue(Frame, length, FPS);
@@ -134,9 +129,8 @@ namespace AddShapeEffect
                     []
                 );
 
-                chain.SetInputAndEffects(shapeOutputImage, item.Effects);
+                chain.UpdateChain(item.Effects);
                 DrawDescription newDescription = chain.UpdateOutputAndDescription(effectDescription, initialDesc);
-                ID2D1Image imageAfterChain = chain.Output;
 
                 float finalOpacity = (float)newDescription.Opacity;
 
@@ -229,7 +223,8 @@ namespace AddShapeEffect
 
             finalCompositeEffect.SetInput(0, inputTransformEffect.Output, true);
 
-            chain.SetInputAndEffects(input, item.Effects);
+            chain.SetInput(input);
+            chain.UpdateChain(item.Effects);
         }
 
         #region SafeTransform3DHelper
