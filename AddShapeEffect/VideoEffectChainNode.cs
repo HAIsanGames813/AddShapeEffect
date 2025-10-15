@@ -7,7 +7,7 @@ using YukkuriMovieMaker.Plugin.Effects;
 
 namespace AddShapeEffect.ForVideoEffectChain
 {
-    public class VideoEffectChainNode : IDisposable
+    public class VideoEffectChainNode
     {
         readonly IGraphicsDevicesAndContext devices;
         readonly AffineTransform2D transform;
