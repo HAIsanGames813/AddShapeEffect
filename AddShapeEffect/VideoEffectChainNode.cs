@@ -16,7 +16,6 @@ namespace AddShapeEffect.ForVideoEffectChain
         ID2D1Image? input;
         bool isEmpty;
         List<(IVideoEffect effect, IVideoEffectProcessor processor)> Chain = [];
-        ImmutableList<IVideoEffect> lastEffects = [];
 
         ID2D1Image output;
         public ID2D1Image Output => isEmpty ? empty : output;
@@ -33,8 +32,6 @@ namespace AddShapeEffect.ForVideoEffectChain
         }
         public void UpdateChain(ImmutableList<IVideoEffect> effects)
         {
-            lastEffects = [.. effects];
-
             var disposedIndex = from tuple in Chain
                                 where !effects.Contains(tuple.effect)
                                 select Chain.IndexOf(tuple) into i
@@ -72,7 +69,6 @@ namespace AddShapeEffect.ForVideoEffectChain
                 if (Chain.Count > 0)
                 {
                     Chain.First().processor.SetInput(input);
-                    UpdateChain(lastEffects);
                     transform.SetInput(0, Chain.Last().processor.Output, true);
                 }
                 else
