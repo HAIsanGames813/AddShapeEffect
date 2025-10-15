@@ -6,6 +6,10 @@
     "プロファイル 1": {
       "commandName": "Executable",
       "executablePath": "E:\\ダウンロード\\YukkuriMovieMaker_v4_Lite\\YukkuriMovieMaker.exe"
+    },
+    "sin's ぷろふぁいる": {
+      "commandName": "Executable",
+      "executablePath": "E:\\sinBeta\\app\\YukkuriMovieMaker_v4\\YukkuriMovieMaker.exe"
     }
   }
 }
