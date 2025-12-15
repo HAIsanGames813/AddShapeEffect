@@ -4,9 +4,9 @@ using YukkuriMovieMaker.Commons;
 using YukkuriMovieMaker.Controls;
 using YukkuriMovieMaker.Exo;
 using YukkuriMovieMaker.Player.Video;
+using YukkuriMovieMaker.Plugin;
 using YukkuriMovieMaker.Plugin.Effects;
 using YukkuriMovieMaker.Plugin.Shape;
-using YukkuriMovieMaker.Plugin.Tachie.Psd;
 using YukkuriMovieMaker.Project.Items;
 using YukkuriMovieMaker.Shape;
 
@@ -16,12 +16,15 @@ namespace AddShapeEffect
     internal class AddShapeEffect : VideoEffectBase
     {
         public override string Label => "図形貼り付け";
+
         [Display(GroupName = "描画", Name = "X座標", Description = "横方向の描画位置")]
         [AnimationSlider("F1", "px", -500, 500)]
         public Animation X { get; } = new Animation(0, -100000, 100000);
+
         [Display(GroupName = "描画", Name = "Y座標", Description = "縦方向の描画位置")]
         [AnimationSlider("F1", "px", -500, 500)]
         public Animation Y { get; } = new Animation(0, -100000, 100000);
+
         [Display(GroupName = "描画", Name = "Z座標", Description = "奥行きの描画位置")]
         [AnimationSlider("F1", "px", -500, 500)]
         public Animation Z { get; } = new Animation(0, -100000, 100000);
@@ -70,33 +73,21 @@ namespace AddShapeEffect
         bool isClippingEnabled = false;
 
         [Display(GroupName = "図形", Name = "種類", Description = "図形の種類")]
-        [EnumComboBox]
-        public ShapeTypeEnum ShapeTypeEnum
-        {
-            get => shapeTypeEnum;
-            set
-            {
-                if (GetShapeType(value) is Type type) ShapeType = type;
-                Set(ref shapeTypeEnum, value);
-            }
-        }
-        ShapeTypeEnum shapeTypeEnum = ShapeTypeEnum.四角形;
-
+        [ShapeTypeComboBox]
         public Type ShapeType { get => shapeType; set => Set(ref shapeType, value); }
-        Type shapeType = typeof(QuadrilateralShapePlugin);
+        Type shapeType = PluginLoader.GetPrimaryPluginType<IShapePlugin>();
 
         private Type? oldShapeType;
-
 
         [Display(GroupName = "図形", AutoGenerateField = true)]
         public IShapeParameter ShapeParameter { get => shapeParameter; set => Set(ref shapeParameter, value); }
         IShapeParameter shapeParameter = new RectangleShapeParameter(null);
 
-
         [Display(GroupName = "図形のエフェクト", Name = "", Description = "図形にかける映像エフェクト")]
         [VideoEffectSelector(PropertyEditorSize = PropertyEditorSize.FullWidth)]
         public ImmutableList<IVideoEffect> Effects { get => effects; set => Set(ref effects, value); }
         ImmutableList<IVideoEffect> effects = [];
+
         public override void BeginEdit()
         {
             oldShapeType = ShapeType;
@@ -126,52 +117,5 @@ namespace AddShapeEffect
 
         protected override IEnumerable<IAnimatable> GetAnimatables()
             => [X, Y, Z, Opacity, Zoom, ZoomX, ZoomY, RotationX, RotationY, RotationZ, ShapeParameter, .. Effects];
-
-        Type? GetShapeType(ShapeTypeEnum shapeType)
-        {
-            switch (shapeType)
-            {
-                case ShapeTypeEnum.背景:
-                    return typeof(BackgroundShapePlugin);
-                case ShapeTypeEnum.円:
-                    return typeof(CircleShapePlugin);
-                case ShapeTypeEnum.三角形:
-                    return typeof(TriangleShapePlugin);
-                case ShapeTypeEnum.四角形:
-                    return typeof(QuadrilateralShapePlugin);
-                case ShapeTypeEnum.五角形:
-                    return typeof(PentagonShapePlugin);
-                case ShapeTypeEnum.六角形:
-                    return typeof(HexagonShapePlugin);
-                case ShapeTypeEnum.星:
-                    return typeof(StarShapePlugin);
-                case ShapeTypeEnum.扇形:
-                    return typeof(FanShapePlugin);
-                case ShapeTypeEnum.くさび形:
-                    return typeof(WedgeShapePlugin);
-                case ShapeTypeEnum.矢印:
-                    return typeof(ArrowShapePlugin);
-                case ShapeTypeEnum.スーパー多角形:
-                    return typeof(SuperformulaShapePlugin);
-                case ShapeTypeEnum.集中線:
-                    return typeof(ConcentrationLineShapePlugin);
-                case ShapeTypeEnum.タイマー:
-                    return typeof(TimerShapePlugin);
-                case ShapeTypeEnum.波形:
-                    return Types.AudioSpectrumShapePlugin;
-                case ShapeTypeEnum.線:
-                    return Types.LineShapePlugin;
-                case ShapeTypeEnum.SVGファイル:
-                    return typeof(SVGShapePlugin);
-                case ShapeTypeEnum.手書きペン:
-                    return Types.PenShapePlugin;
-                case ShapeTypeEnum.数値:
-                    return Types.NumberText;
-                case ShapeTypeEnum.PSDファイル:
-                    return typeof(PsdShapePlugin);
-            }
-
-            return null;
-        }
     }
 }
