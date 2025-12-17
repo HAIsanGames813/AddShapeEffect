@@ -16,4 +16,4 @@ namespace AddShapeEffect
 
         public static Type? NumberText = YukkuriMovieMakerPluginCommunity.GetType("YukkuriMovieMaker.Plugin.Community.Shape.NumberText.NumberText");
     }
-}
+}   

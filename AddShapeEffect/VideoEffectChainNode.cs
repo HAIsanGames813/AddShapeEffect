@@ -25,11 +25,10 @@ namespace AddShapeEffect.ForVideoEffectChain
             this.devices = devices;
             transform = new AffineTransform2D(devices.DeviceContext);
             output = transform.Output;
-
             empty = devices.DeviceContext.CreateEmptyBitmap();
-
             isEmpty = true;
         }
+
         public void UpdateChain(ImmutableList<IVideoEffect> effects)
         {
             var disposedIndex = from tuple in Chain
@@ -52,7 +51,6 @@ namespace AddShapeEffect.ForVideoEffectChain
                 int index = keeped.IndexOf(effect);
                 newChain.Add(index < 0 ? (effect, effect.CreateVideoEffect(devices)) : Chain[index]);
             }
-
             Chain = newChain;
         }
 
@@ -62,6 +60,7 @@ namespace AddShapeEffect.ForVideoEffectChain
             if (input == null)
             {
                 isEmpty = true;
+                transform.SetInput(0, null, true);
                 return;
             }
             else
@@ -102,39 +101,27 @@ namespace AddShapeEffect.ForVideoEffectChain
             Chain.Clear();
         }
 
-        public DrawDescription UpdateOutputAndDescription(TimelineItemSourceDescription timelineSourceDescription, DrawDescription drawDescription)
+        // 引数を EffectDescription に変更し、内部で安全にプロパティを解決
+        public DrawDescription UpdateOutputAndDescription(EffectDescription effectDescription)
         {
             if (input == null)
             {
                 isEmpty = true;
-                return drawDescription;
+                transform.SetInput(0, null, true);
+                return effectDescription.DrawDescription;
             }
 
-            fl.UpdateFrom(timelineSourceDescription);
-            DrawDescription desc = new(
-                drawDescription.Draw,
-                drawDescription.CenterPoint,
-                drawDescription.Zoom,
-                drawDescription.Rotation,
-                drawDescription.Camera,
-                drawDescription.ZoomInterpolationMode,
-                drawDescription.Opacity,
-                drawDescription.Invert,
-                drawDescription.Controllers
-                );
-
             ID2D1Image? image = input;
+            DrawDescription desc = effectDescription.DrawDescription;
+
             foreach (var (effect, processor) in Chain)
             {
                 if (effect.IsEnabled)
                 {
-                    IVideoEffectProcessor item = processor;
-                    item.SetInput(image);
-                    TimelineItemSourceDescription timeLineItemSourceDescription
-                        = new(timelineSourceDescription, fl.Frame, fl.Length, 0);
-                    EffectDescription effectDescription = new(timeLineItemSourceDescription, desc, 0, 1);
-                    desc = item.Update(effectDescription);
-                    image = item.Output;
+                    processor.SetInput(image);
+                    // 個別のエフェクトを更新。元の effectDescription をそのまま渡すのが最も安全
+                    desc = processor.Update(effectDescription with { DrawDescription = desc });
+                    image = processor.Output;
                 }
             }
 
@@ -149,7 +136,6 @@ namespace AddShapeEffect.ForVideoEffectChain
             transform.Dispose();
             empty.Dispose();
             output.Dispose();
-
             Chain.ForEach(i =>
             {
                 i.processor.ClearInput();
