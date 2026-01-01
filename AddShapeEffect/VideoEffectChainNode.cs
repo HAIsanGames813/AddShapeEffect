@@ -101,7 +101,6 @@ namespace AddShapeEffect.ForVideoEffectChain
             Chain.Clear();
         }
 
-        // 引数を EffectDescription に変更し、内部で安全にプロパティを解決
         public DrawDescription UpdateOutputAndDescription(EffectDescription effectDescription)
         {
             if (input == null)
@@ -119,7 +118,6 @@ namespace AddShapeEffect.ForVideoEffectChain
                 if (effect.IsEnabled)
                 {
                     processor.SetInput(image);
-                    // 個別のエフェクトを更新。元の effectDescription をそのまま渡すのが最も安全
                     desc = processor.Update(effectDescription with { DrawDescription = desc });
                     image = processor.Output;
                 }
