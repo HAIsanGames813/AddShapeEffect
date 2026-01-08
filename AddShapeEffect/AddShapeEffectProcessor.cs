@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using System.Numerics;
 using AddShapeEffect.ForVideoEffectChain;
 using Vortice.Direct2D1;
@@ -73,7 +73,6 @@ namespace AddShapeEffect
             DrawDescription descAfterChain = effectDescription.DrawDescription;
 
             if (currentInput == null) return effectDescription.DrawDescription;
-
             {
                 var shapeParameter = item.ShapeParameter;
                 if (isFirst || this.shapeParameter != shapeParameter)
@@ -129,8 +128,8 @@ namespace AddShapeEffect
                 float baseL = x - baseHalfWidth;
                 float baseR = x + baseHalfWidth;
 
-                float targetL = item.PinLeft ? (-inputWidth / 2f + leftMargin) : baseL;
-                float targetR = item.PinRight ? (inputWidth / 2f - rightMargin) : baseR;
+                float targetL = item.PinLeft ? ((-inputWidth / 2f) + leftMargin) : baseL;
+                float targetR = item.PinRight ? ((inputWidth / 2f) - rightMargin) : baseR;
 
                 float finalWidth = targetR - targetL;
                 float finalScaleX = (shapeWidth > 0) ? (finalWidth / shapeWidth) : 0;
@@ -140,8 +139,8 @@ namespace AddShapeEffect
                 float baseT = y - baseHalfHeight;
                 float baseB = y + baseHalfHeight;
 
-                float targetT = item.PinTop ? (-inputHeight / 2f + topMargin) : baseT;
-                float targetB = item.PinBottom ? (inputHeight / 2f - bottomMargin) : baseB;
+                float targetT = item.PinTop ? ((-inputHeight / 2f) + topMargin) : baseT;
+                float targetB = item.PinBottom ? ((inputHeight / 2f) - bottomMargin) : baseB;
 
                 float finalHeight = targetB - targetT;
                 float finalScaleY = (shapeHeight > 0) ? (finalHeight / shapeHeight) : 0;
