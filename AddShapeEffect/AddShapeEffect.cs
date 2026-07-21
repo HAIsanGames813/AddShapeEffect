@@ -72,10 +72,37 @@ namespace AddShapeEffect
         public bool InvertY { get => invertY; set => Set(ref invertY, value); }
         bool invertY = false;
 
+        // ------------------------------------------------------------
+        // ★追加: Z順に描画
+        // NOTE: これはタイムライン全体のアイテム間Z順合成（本体の「Z順に描画」機能、
+        //   4.55で交差表示が改善されるとされているもの）そのものではありません。
+        //   本エフェクトが扱えるのは「この図形」と「入力(input)」1組の前後関係だけなので、
+        //   ここでは図形自身のZ座標(下の「Z座標」)が0以下なら手前、0より大きければ奥、
+        //   という簡易的なローカル判定に留めています。ONの間は「背面に描画」より
+        //   こちらが優先されます。複数アイテムが実際に交差してめり込むような
+        //   本格的な描画までは再現できません。
+        // ------------------------------------------------------------
+        [Display(GroupName = "描画", Name = "Z順に描画")]
+        [ToggleSlider]
+        public bool IsZOrderDrawing { get => isZOrderDrawing; set => Set(ref isZOrderDrawing, value); }
+        bool isZOrderDrawing = false;
+
         [Display(GroupName = "描画", Name = "背面に描画")]
         [ToggleSlider]
         public bool IsBack { get => isBack; set => Set(ref isBack, value); }
         bool isBack = false;
+
+        // ------------------------------------------------------------
+        // ★追加: 合成モード（グラデーションマップエフェクトのBlendModeを参考に追加）
+        // NOTE: YukkuriMovieMaker.Project.Blend は本体の合成モードと共通の enum です。
+        //       [EnumComboBox] は本体UIでenumドロップダウンに使われる属性名の想定です。
+        //       手元のSDK(YukkuriMovieMaker.Controls.dll)でビルドしCS0246/属性未検出になる場合は、
+        //       実際に使われているenum用の属性名に置き換えてください。
+        // ------------------------------------------------------------
+        [Display(GroupName = "合成", Name = "合成モード")]
+        [EnumComboBox]
+        public YukkuriMovieMaker.Project.Blend BlendMode { get => blendMode; set => Set(ref blendMode, value); }
+        YukkuriMovieMaker.Project.Blend blendMode = YukkuriMovieMaker.Project.Blend.Normal;
 
         [Display(GroupName = "サイズ追従", Name = "左端に固定")]
         [ToggleSlider]
