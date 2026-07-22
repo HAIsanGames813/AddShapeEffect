@@ -63,16 +63,6 @@ namespace AddShapeEffect.ForVideoEffectChain
                 transform.SetInput(0, null, true);
                 return;
             }
-
-            // ★再修正: 各エフェクトの内部Direct2Dグラフは、SetInput()だけでは
-            //   完全には組み上がらず、Update()が呼ばれて初めて確定する実装が多い
-            //  （特に複数入力を持つエフェクトや、無効化されているエフェクトで顕著）。
-            //   SetInput()の時点ではフレーム情報(EffectDescription)がなくUpdate()を
-            //   呼べないため、ここでチェーン内processorの.Outputを先読みすると
-            //   「グラフに構成エラーが見つかりました」(D2DERR_INVALID_GRAPH_CONFIGURATION)
-            //   が発生することがある。
-            //   実際のチェーン確定は直後に呼ばれる UpdateOutputAndDescription() が
-            //   毎フレーム必ず行うため、ここでは生の input をそのまま渡すだけにする。
             transform.SetInput(0, input, true);
             isEmpty = false;
         }

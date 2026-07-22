@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+<data name="CurrentCulture" xml:space="preserve"><value>id-id</value></data>
+<data name="Paste_shape" xml:space="preserve"><value>Tempel Bentuk</value></data>
+<data name="Draw" xml:space="preserve"><value>Gambar</value></data>
+<data name="X_coordinate" xml:space="preserve"><value>Koordinat X</value></data>
+<data name="Y_coordinate" xml:space="preserve"><value>Koordinat Y</value></data>
+<data name="Z_coordinate" xml:space="preserve"><value>Koordinat Z</value></data>
+<data name="Opacity" xml:space="preserve"><value>Opasitas</value></data>
+<data name="Scale_factor" xml:space="preserve"><value>Skala</value></data>
+<data name="Scale_factor_x" xml:space="preserve"><value>Skala X</value></data>
+<data name="Scale_factor_y" xml:space="preserve"><value>Skala Y</value></data>
+<data name="X_axis_rotation" xml:space="preserve"><value>Rotasi Sumbu X</value></data>
+<data name="Y_axis_rotation" xml:space="preserve"><value>Rotasi Sumbu Y</value></data>
+<data name="Z_axis_rotation" xml:space="preserve"><value>Rotasi Sumbu Z</value></data>
+<data name="Pixel_art" xml:space="preserve"><value>Seni Piksel</value></data>
+<data name="Flip_horizontal" xml:space="preserve"><value>Balik Horizontal</value></data>
+<data name="Flip_vertical" xml:space="preserve"><value>Balik Vertikal</value></data>
+<data name="Bring_to_front" xml:space="preserve"><value>Bawa ke Depan</value></data>
+<data name="Draw_behind" xml:space="preserve"><value>Gambar di Belakang</value></data>
+<data name="Draw_in_z_order" xml:space="preserve"><value>Gambar dalam Urutan Z</value></data>
+<data name="Blend_mode" xml:space="preserve"><value>Mode Campuran</value></data>
+<data name="Follow_size" xml:space="preserve"><value>Ikuti Ukuran</value></data>
+<data name="Pin_to_left" xml:space="preserve"><value>Sematkan ke Kiri</value></data>
+<data name="Pin_to_right" xml:space="preserve"><value>Sematkan ke Kanan</value></data>
+<data name="Pin_to_top" xml:space="preserve"><value>Sematkan ke Atas</value></data>
+<data name="Pin_to_bottom" xml:space="preserve"><value>Sematkan ke Bawah</value></data>
+<data name="Margin" xml:space="preserve"><value>Margin</value></data>
+<data name="Left" xml:space="preserve"><value>Kiri</value></data>
+<data name="Right" xml:space="preserve"><value>Kanan</value></data>
+<data name="Top" xml:space="preserve"><value>Atas</value></data>
+<data name="Bottom" xml:space="preserve"><value>Bawah</value></data>
+<data name="Shape" xml:space="preserve"><value>Bentuk</value></data>
+<data name="Clipping" xml:space="preserve"><value>Kliping</value></data>
+<data name="Type" xml:space="preserve"><value>Jenis</value></data>
+<data name="Shape_effect" xml:space="preserve"><value>Efek Bentuk</value></data>
+</root>

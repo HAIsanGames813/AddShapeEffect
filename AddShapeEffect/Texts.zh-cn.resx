@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+<data name="CurrentCulture" xml:space="preserve"><value>zh-cn</value></data>
+<data name="Paste_shape" xml:space="preserve"><value>粘贴形状</value></data>
+<data name="Draw" xml:space="preserve"><value>绘制</value></data>
+<data name="X_coordinate" xml:space="preserve"><value>X 坐标</value></data>
+<data name="Y_coordinate" xml:space="preserve"><value>Y 坐标</value></data>
+<data name="Z_coordinate" xml:space="preserve"><value>Z 坐标</value></data>
+<data name="Opacity" xml:space="preserve"><value>不透明度</value></data>
+<data name="Scale_factor" xml:space="preserve"><value>缩放比</value></data>
+<data name="Scale_factor_x" xml:space="preserve"><value>缩放比 X</value></data>
+<data name="Scale_factor_y" xml:space="preserve"><value>缩放比 Y</value></data>
+<data name="X_axis_rotation" xml:space="preserve"><value>X 轴旋转</value></data>
+<data name="Y_axis_rotation" xml:space="preserve"><value>Y 轴旋转</value></data>
+<data name="Z_axis_rotation" xml:space="preserve"><value>Z 轴旋转</value></data>
+<data name="Pixel_art" xml:space="preserve"><value>像素画</value></data>
+<data name="Flip_horizontal" xml:space="preserve"><value>水平翻转</value></data>
+<data name="Flip_vertical" xml:space="preserve"><value>垂直翻转</value></data>
+<data name="Bring_to_front" xml:space="preserve"><value>置于顶层</value></data>
+<data name="Draw_behind" xml:space="preserve"><value>在背面绘制</value></data>
+<data name="Draw_in_z_order" xml:space="preserve"><value>按 Z 轴顺序绘制</value></data>
+<data name="Blend_mode" xml:space="preserve"><value>混合模式</value></data>
+<data name="Follow_size" xml:space="preserve"><value>跟随尺寸</value></data>
+<data name="Pin_to_left" xml:space="preserve"><value>固定到左边缘</value></data>
+<data name="Pin_to_right" xml:space="preserve"><value>固定到右边缘</value></data>
+<data name="Pin_to_top" xml:space="preserve"><value>固定到上边缘</value></data>
+<data name="Pin_to_bottom" xml:space="preserve"><value>固定到下边缘</value></data>
+<data name="Margin" xml:space="preserve"><value>边距</value></data>
+<data name="Left" xml:space="preserve"><value>左</value></data>
+<data name="Right" xml:space="preserve"><value>右</value></data>
+<data name="Top" xml:space="preserve"><value>上</value></data>
+<data name="Bottom" xml:space="preserve"><value>下</value></data>
+<data name="Shape" xml:space="preserve"><value>形状</value></data>
+<data name="Clipping" xml:space="preserve"><value>裁剪</value></data>
+<data name="Type" xml:space="preserve"><value>类型</value></data>
+<data name="Shape_effect" xml:space="preserve"><value>形状效果</value></data>
+</root>

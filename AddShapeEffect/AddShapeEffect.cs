@@ -12,151 +12,139 @@ using YukkuriMovieMaker.Shape;
 
 namespace AddShapeEffect
 {
-    [VideoEffect("図形貼り付け", ["装飾"], [], isAviUtlSupported: false)]
+    [VideoEffect(nameof(Texts.Paste_shape), [VideoEffectCategories.Decoration], ["図形", "Shape", "貼り付け", "Paste", "追加", "Add"], isAviUtlSupported: false, ResourceType = typeof(Texts))]
     internal class AddShapeEffect : VideoEffectBase
     {
-        public override string Label => "図形貼り付け";
+        public override string Label => Texts.Paste_shape;
 
-        [Display(GroupName = "描画", Name = "X座標")]
+        [Display(GroupName = nameof(Texts.Draw), Name = nameof(Texts.X_coordinate), ResourceType = typeof(Texts))]
         [AnimationSlider("F1", "px", -500, 500)]
         public Animation X { get; } = new Animation(0, -100000, 100000);
 
-        [Display(GroupName = "描画", Name = "Y座標")]
+        [Display(GroupName = nameof(Texts.Draw), Name = nameof(Texts.Y_coordinate), ResourceType = typeof(Texts))]
         [AnimationSlider("F1", "px", -500, 500)]
         public Animation Y { get; } = new Animation(0, -100000, 100000);
 
-        [Display(GroupName = "描画", Name = "Z座標")]
+        [Display(GroupName = nameof(Texts.Draw), Name = nameof(Texts.Z_coordinate), ResourceType = typeof(Texts))]
         [AnimationSlider("F1", "px", -500, 500)]
         public Animation Z { get; } = new Animation(0, -100000, 100000);
 
-        [Display(GroupName = "描画", Name = "不透明度")]
+        [Display(GroupName = nameof(Texts.Draw), Name = nameof(Texts.Opacity), ResourceType = typeof(Texts))]
         [AnimationSlider("F1", "%", 0, 100)]
         public Animation Opacity { get; } = new Animation(100, 0, 100);
 
-        [Display(GroupName = "描画", Name = "拡大率")]
+        [Display(GroupName = nameof(Texts.Draw), Name = nameof(Texts.Scale_factor), ResourceType = typeof(Texts))]
         [AnimationSlider("F1", "%", 0, 100)]
         public Animation Zoom { get; } = new Animation(100, 0, 100000);
 
-        [Display(GroupName = "描画", Name = "拡大率X")]
+        [Display(GroupName = nameof(Texts.Draw), Name = nameof(Texts.Scale_factor_x), ResourceType = typeof(Texts))]
         [AnimationSlider("F1", "%", 0, 100)]
         public Animation ZoomX { get; } = new Animation(100, 0, 100000);
 
-        [Display(GroupName = "描画", Name = "拡大率Y")]
+        [Display(GroupName = nameof(Texts.Draw), Name = nameof(Texts.Scale_factor_y), ResourceType = typeof(Texts))]
         [AnimationSlider("F1", "%", 0, 100)]
         public Animation ZoomY { get; } = new Animation(100, 0, 100000);
 
-        [Display(GroupName = "描画", Name = "X軸回転")]
+        [Display(GroupName = nameof(Texts.Draw), Name = nameof(Texts.X_axis_rotation), ResourceType = typeof(Texts))]
         [AnimationSlider("F1", "°", -360, 360)]
         public Animation RotationX { get; } = new Animation(0, -100000, 100000);
 
-        [Display(GroupName = "描画", Name = "Y軸回転")]
+        [Display(GroupName = nameof(Texts.Draw), Name = nameof(Texts.Y_axis_rotation), ResourceType = typeof(Texts))]
         [AnimationSlider("F1", "°", -360, 360)]
         public Animation RotationY { get; } = new Animation(0, -100000, 100000);
 
-        [Display(GroupName = "描画", Name = "Z軸回転")]
+        [Display(GroupName = nameof(Texts.Draw), Name = nameof(Texts.Z_axis_rotation), ResourceType = typeof(Texts))]
         [AnimationSlider("F1", "°", -360, 360)]
         public Animation RotationZ { get; } = new Animation(0, -100000, 100000);
 
-        [Display(GroupName = "描画", Name = "ドット絵")]
+        [Display(GroupName = nameof(Texts.Draw), Name = nameof(Texts.Pixel_art), ResourceType = typeof(Texts))]
         [ToggleSlider]
         public bool IsDot { get => isDot; set => Set(ref isDot, value); }
         bool isDot = false;
 
-        [Display(GroupName = "描画", Name = "左右反転")]
+        [Display(GroupName = nameof(Texts.Draw), Name = nameof(Texts.Flip_horizontal), ResourceType = typeof(Texts))]
         [ToggleSlider]
         public bool InvertX { get => invertX; set => Set(ref invertX, value); }
         bool invertX = false;
 
-        [Display(GroupName = "描画", Name = "上下反転")]
+        [Display(GroupName = nameof(Texts.Draw), Name = nameof(Texts.Flip_vertical), ResourceType = typeof(Texts))]
         [ToggleSlider]
         public bool InvertY { get => invertY; set => Set(ref invertY, value); }
         bool invertY = false;
 
-        // ------------------------------------------------------------
-        // ★追加: Z順に描画
-        // NOTE: これはタイムライン全体のアイテム間Z順合成（本体の「Z順に描画」機能、
-        //   4.55で交差表示が改善されるとされているもの）そのものではありません。
-        //   本エフェクトが扱えるのは「この図形」と「入力(input)」1組の前後関係だけなので、
-        //   ここでは図形自身のZ座標(下の「Z座標」)が0以下なら手前、0より大きければ奥、
-        //   という簡易的なローカル判定に留めています。ONの間は「背面に描画」より
-        //   こちらが優先されます。複数アイテムが実際に交差してめり込むような
-        //   本格的な描画までは再現できません。
-        // ------------------------------------------------------------
-        [Display(GroupName = "描画", Name = "Z順に描画")]
+        [Display(GroupName = nameof(Texts.Draw), Name = nameof(Texts.Bring_to_front), ResourceType = typeof(Texts))]
         [ToggleSlider]
-        public bool IsZOrderDrawing { get => isZOrderDrawing; set => Set(ref isZOrderDrawing, value); }
-        bool isZOrderDrawing = false;
+        public bool IsAlwaysFront { get => isAlwaysFront; set => Set(ref isAlwaysFront, value); }
+        bool isAlwaysFront = false;
 
-        [Display(GroupName = "描画", Name = "背面に描画")]
+        [Display(GroupName = nameof(Texts.Draw), Name = nameof(Texts.Draw_behind), ResourceType = typeof(Texts))]
         [ToggleSlider]
         public bool IsBack { get => isBack; set => Set(ref isBack, value); }
         bool isBack = false;
 
-        // ------------------------------------------------------------
-        // ★追加: 合成モード（グラデーションマップエフェクトのBlendModeを参考に追加）
-        // NOTE: YukkuriMovieMaker.Project.Blend は本体の合成モードと共通の enum です。
-        //       [EnumComboBox] は本体UIでenumドロップダウンに使われる属性名の想定です。
-        //       手元のSDK(YukkuriMovieMaker.Controls.dll)でビルドしCS0246/属性未検出になる場合は、
-        //       実際に使われているenum用の属性名に置き換えてください。
-        // ------------------------------------------------------------
-        [Display(GroupName = "合成", Name = "合成モード")]
+        [Display(GroupName = nameof(Texts.Draw), Name = nameof(Texts.Draw_in_z_order), ResourceType = typeof(Texts))]
+        [ToggleSlider]
+        public bool IsZOrderDrawing { get => isZOrderDrawing; set => Set(ref isZOrderDrawing, value); }
+        bool isZOrderDrawing = false;
+
+        [Display(GroupName = nameof(Texts.Draw), Name = nameof(Texts.Blend_mode), ResourceType = typeof(Texts))]
         [EnumComboBox]
         public YukkuriMovieMaker.Project.Blend BlendMode { get => blendMode; set => Set(ref blendMode, value); }
         YukkuriMovieMaker.Project.Blend blendMode = YukkuriMovieMaker.Project.Blend.Normal;
 
-        [Display(GroupName = "サイズ追従", Name = "左端に固定")]
+        [Display(GroupName = nameof(Texts.Follow_size), Name = nameof(Texts.Pin_to_left), ResourceType = typeof(Texts))]
         [ToggleSlider]
         public bool PinLeft { get => pinLeft; set => Set(ref pinLeft, value); }
         bool pinLeft = false;
 
-        [Display(GroupName = "サイズ追従", Name = "右端に固定")]
+        [Display(GroupName = nameof(Texts.Follow_size), Name = nameof(Texts.Pin_to_right), ResourceType = typeof(Texts))]
         [ToggleSlider]
         public bool PinRight { get => pinRight; set => Set(ref pinRight, value); }
         bool pinRight = false;
 
-        [Display(GroupName = "サイズ追従", Name = "上端に固定")]
+        [Display(GroupName = nameof(Texts.Follow_size), Name = nameof(Texts.Pin_to_top), ResourceType = typeof(Texts))]
         [ToggleSlider]
         public bool PinTop { get => pinTop; set => Set(ref pinTop, value); }
         bool pinTop = false;
 
-        [Display(GroupName = "サイズ追従", Name = "下端に固定")]
+        [Display(GroupName = nameof(Texts.Follow_size), Name = nameof(Texts.Pin_to_bottom), ResourceType = typeof(Texts))]
         [ToggleSlider]
         public bool PinBottom { get => pinBottom; set => Set(ref pinBottom, value); }
         bool pinBottom = false;
 
-        [Display(GroupName = "余白", Name = "左")]
+        [Display(GroupName = nameof(Texts.Margin), Name = nameof(Texts.Left), ResourceType = typeof(Texts))]
         [AnimationSlider("F1", "px", -500, 500)]
         public Animation Left { get; } = new Animation(0, -100000, 100000);
 
-        [Display(GroupName = "余白", Name = "右")]
+        [Display(GroupName = nameof(Texts.Margin), Name = nameof(Texts.Right), ResourceType = typeof(Texts))]
         [AnimationSlider("F1", "px", -500, 500)]
         public Animation Right { get; } = new Animation(0, -100000, 100000);
 
-        [Display(GroupName = "余白", Name = "上")]
+        [Display(GroupName = nameof(Texts.Margin), Name = nameof(Texts.Top), ResourceType = typeof(Texts))]
         [AnimationSlider("F1", "px", -500, 500)]
         public Animation Top { get; } = new Animation(0, -100000, 100000);
 
-        [Display(GroupName = "余白", Name = "下")]
+        [Display(GroupName = nameof(Texts.Margin), Name = nameof(Texts.Bottom), ResourceType = typeof(Texts))]
         [AnimationSlider("F1", "px", -500, 500)]
         public Animation Bottom { get; } = new Animation(0, -100000, 100000);
 
-        [Display(GroupName = "図形", Name = "クリッピング")]
+        [Display(GroupName = nameof(Texts.Shape), Name = nameof(Texts.Clipping), ResourceType = typeof(Texts))]
         [ToggleSlider]
         public bool IsClippingEnabled { get => isClippingEnabled; set => Set(ref isClippingEnabled, value); }
         bool isClippingEnabled = false;
 
-        [Display(GroupName = "図形", Name = "種類")]
+        [Display(GroupName = nameof(Texts.Shape), Name = nameof(Texts.Type), ResourceType = typeof(Texts))]
         [ShapeTypeComboBox]
         public Type ShapeType { get => shapeType; set => Set(ref shapeType, value); }
         Type shapeType = PluginLoader.GetPrimaryPluginType<IShapePlugin>();
 
         private Type? oldShapeType;
 
-        [Display(GroupName = "図形", AutoGenerateField = true)]
-        public IShapeParameter ShapeParameter { get => shapeParameter; set => Set(ref shapeParameter, value); }
-        IShapeParameter shapeParameter = new RectangleShapeParameter(null);
+        [Display(GroupName = nameof(Texts.Shape), AutoGenerateField = true, ResourceType = typeof(Texts))]
+        public IShapeParameter? ShapeParameter { get => shapeParameter; set => Set(ref shapeParameter, value); }
+        IShapeParameter? shapeParameter = new RectangleShapeParameter(null);
 
-        [Display(GroupName = "図形のエフェクト", Name = "")]
+        [Display(GroupName = nameof(Texts.Shape_effect), ResourceType = typeof(Texts))]
         [VideoEffectSelector(PropertyEditorSize = PropertyEditorSize.FullWidth)]
         public ImmutableList<IVideoEffect> Effects { get => effects; set => Set(ref effects, value); }
         ImmutableList<IVideoEffect> effects = [];
@@ -189,6 +177,14 @@ namespace AddShapeEffect
         }
 
         protected override IEnumerable<IAnimatable> GetAnimatables()
-            => [X, Y, Z, Opacity, Zoom, ZoomX, ZoomY, RotationX, RotationY, RotationZ, Left, Right, Top, Bottom, ShapeParameter, .. Effects];
+        {
+            var animatables = new List<IAnimatable> { X, Y, Z, Opacity, Zoom, ZoomX, ZoomY, RotationX, RotationY, RotationZ, Left, Right, Top, Bottom };
+            if (ShapeParameter is not null)
+            {
+                animatables.Add(ShapeParameter);
+            }
+            animatables.AddRange(Effects);
+            return animatables;
+        }
     }
 }
