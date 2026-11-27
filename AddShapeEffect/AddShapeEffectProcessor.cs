@@ -124,7 +124,7 @@ namespace AddShapeEffect
                 };
 
                 chain.SetInput(shapeOutputImage);
-                descAfterChain = chain.UpdateOutputAndDescription(effectDescription with { DrawDescription = neutralDrawDescription });
+                descAfterChain = chain.UpdateOutput(effectDescription, neutralDrawDescription);
                 ID2D1Image imageAfterChain = chain.Output;
 
                 drawingBakeEffect.SetInput(imageAfterChain);
