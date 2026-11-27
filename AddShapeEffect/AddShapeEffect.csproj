@@ -46,7 +46,7 @@
 		</Reference>
 
 		<Reference Include="System.Numerics.Vectors">
-			<HintPath>C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\$(TargetFramework.Split('-')[0])\ref\$(TargetFramework.Split('-')[0])\System.Numerics.Vectors.dll</HintPath>
+			<HintPath>$(YMM4DirPath)System.Numerics.Vectors.dll</HintPath>
 		</Reference>
 
 	</ItemGroup>
