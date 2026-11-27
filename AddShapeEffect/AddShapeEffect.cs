@@ -7,6 +7,7 @@ using YukkuriMovieMaker.Player.Video;
 using YukkuriMovieMaker.Plugin;
 using YukkuriMovieMaker.Plugin.Effects;
 using YukkuriMovieMaker.Plugin.Shape;
+using YukkuriMovieMaker.Project;
 using YukkuriMovieMaker.Project.Items;
 using YukkuriMovieMaker.Shape;
 
@@ -174,6 +175,32 @@ namespace AddShapeEffect
         public override IVideoEffectProcessor CreateVideoEffect(IGraphicsDevicesAndContext devices)
         {
             return new AddShapeEffectProcessor(devices, this);
+        }
+        public override IEnumerable<string> GetFiles() => [.. Effects.OfType<IFileItem>().Select(x => x.GetFiles()).SelectMany(x => x)];
+
+        public override void ReplaceFile(string from, string to)
+        {
+            foreach (IFileItem item in Effects.OfType<IFileItem>())
+                item.ReplaceFile(from, to);
+        }
+
+        public override IEnumerable<TimelineResource> GetResources()
+        {
+            foreach (TimelineResource tr in base.GetResources())
+                yield return tr;
+
+            foreach (IVideoEffect effect in Effects.OfType<IVideoEffect>())
+            {
+                foreach (TimelineResource tr_1 in effect.GetResources())
+                    yield return tr_1;
+
+                if (ContentId.TryParses(effect.Remark, out ContentId[]? contentIds))
+                    foreach (ContentId contentId in contentIds)
+                        yield return TimelineResource.CreateFromContentId(contentId);
+
+                if (TimelineResource.TryCreateFromVideoEffect(effect, out TimelineResource? resource))
+                    yield return resource;
+            }
         }
 
         protected override IEnumerable<IAnimatable> GetAnimatables()
