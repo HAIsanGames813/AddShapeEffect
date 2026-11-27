@@ -77,7 +77,8 @@ For details on parameters, please refer to the [YMM4 Information Site](https://y
 
 ## Changelog
 #### 4.0.1
-— Fixes —
+Fixes
+
 - Fixed an issue where content IDs of nested effects were not being retrieved correctly. (Contributed by [sinBetaKun](https://github.com/sinBetaKun))
 
 ### 4.0.0
