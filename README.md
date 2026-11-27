@@ -1,4 +1,5 @@
-<img width="1920" height="1080" alt="図形貼り付け" src="https://github.com/user-attachments/assets/7f6f8e89-cc6e-43eb-b94b-951775bd1404" />
+<img width="1920" height="1080" alt="図形貼り付け" src="https://github.com/user-attachments/assets/4d511d48-1380-4e4b-908b-2e99fad33297" />
+
 
 # 図形貼り付け
 ## 概要
@@ -56,7 +57,7 @@
 MIT License
 
 ---
-<img width="1920" height="1080" alt="AddShape" src="https://github.com/user-attachments/assets/4bca0d10-35a9-415c-a881-18643125ab49" />
+<img width="1920" height="1080" alt="AddShape" src="https://github.com/user-attachments/assets/7ee7deeb-57e2-40ee-877d-7f970e8bff4e" />
 
 # Shape Paste
 
@@ -75,6 +76,9 @@ For details on parameters, please refer to the [YMM4 Information Site](https://y
 *EXO export is not supported.*
 
 ## Changelog
+#### 4.0.1
+— Fixes —
+- Fixed an issue where content IDs of nested effects were not being retrieved correctly. (Contributed by [sinBetaKun](https://github.com/sinBetaKun))
 
 ### 4.0.0
 
